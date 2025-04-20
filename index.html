@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta itemprop="name" content="网页版Minecraft在线游玩/下载">
+    <meta itemprop="description" content="一个集合了当前主流的网页版Minecraft的网站，包含1.5.2，1.8.8，1.12.2等版本，有JavaScript和WebAssembly两种高性能运行模式，支持手机和电脑端游玩，适合学生党和上班族摸鱼或空闲时游玩">
+   <meta itemprop="author" content="LCRstem">
+   <meta itemprop="datePublished" content="2025-04-19">
+   <meta http-equiv="Content-Language"content="zh-cn"/>
+   <meta name="keywords" content="mc.minecraft,eaglercraft,网页版MC,网页版我的世界,MC.JS,LCRstem"/>
+   <meta name="robots" content="all" />
+   <link rel="shortcut icon" href="./icon.png" />
+   <meta property="og:locale" content="zh-CN" />
+   <meta property="og:type" content="website" />
+   <meta property="og:title" content="网页版Minecraft在线游玩/下载" />
+   <meta property="og:description" content="网页版Minecraft在线游玩/下载" />
+   <title>Minecraft Web Edition | 我的世界网页版</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --secondary: #2980b9;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --glass: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Inter Regular'), local('Inter-Regular');
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s forwards;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .card:nth-child(1) { animation: fadeInUp 0.6s 0.1s forwards; }
+        .card:nth-child(2) { animation: fadeInUp 0.6s 0.2s forwards; }
+        .card:nth-child(3) { animation: fadeInUp 0.6s 0.3s forwards; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: rgba(44, 62, 80, 0.9);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .tech-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .tech-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: var(--transition);
+            opacity: 0.9;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .btn.launch::before {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .btn.download::before {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+        }
+
+        .btn .icon {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .btn-text {
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            color: rgba(44, 62, 80, 0.6);
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Minecraft Web Edition</h1>
+            <p>基于现代Web技术的网页版Minecraft</p>
+            <p>链接在网页底部</p>
+        </header>
+
+        <div class="card">
+            <h2>简介</h2>
+            <p>通过JavaScript等技术，Eaglercraft团队实现了在浏览器中直接运行Minecraft Java Edition。无需安装任何客户端，在临时的设备上也能便携游玩，支持多版本和JavaScript和WebAssembly两种高性能运行模式</p>
+        </div>
+
+        <div class="card">
+            <h2>技术原理</h2>
+            <p>我们采用前沿的Web技术栈，确保游戏运行的流畅性和稳定性：</p>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">JS</div>
+                    <span>JavaScript核心</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">WA</div>
+                    <span>WebAssembly编译</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">GL</div>
+                    <span>WebGL渲染</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">VM</div>
+                    <span>TeaVM虚拟机</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">SV</div>
+                    <span>本地式存储</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>技术优势</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">DL</div>
+                    <span>免下载</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">LA</div>
+                    <span>可联机</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">WE</div>
+                    <span>可加服</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">FR</div>
+                    <span>全免费</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">PC</div>
+                    <span>本地化</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">AD</div>
+                    <span>无广告</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">ES</div>
+                    <span>便携式</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>版本推荐</h2>
+            <p>以下是关于当前已有的5大版本的介绍：</p>
+            <div class="tech-grid">
+
+                <div class="tech-item">
+                    <div class="tech-icon">BS</div>
+                    <span>Eaglercraft1.12.2</span>
+                </div>
+           <p>原版MC1.12.2此版本是最新测试版本，仍在开发中建议在较好的设备上使用WASM版（文件过大，使用源链）</p>
+
+                <div class="tech-item">
+                    <div class="tech-icon">WS</div>
+                    <span>Eaglercraft1.12.2WASM</span>
+                </div>
+           <p>WASM技术优化的原版MC1.12.2，FPS可以翻倍但是需要大量运行内存，兼容性一般</p>
+
+                <div class="tech-item">
+                    <div class="tech-icon">MC</div>
+                    <span>Eaglercraft1.12.2系列</span>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-icon">BS</div>
+                    <span>Eaglercraft1.8.8</span>
+                </div>
+           <p>原版MC1.8.8，是目前最稳定，兼容性最好的网页MC，此版本支持手机等触屏设备</p>
+
+                <div class="tech-item">
+                    <div class="tech-icon">WS</div>
+                    <span>Eaglercraft1.8.8WASM</span>
+                </div>
+           <p>WASM技术优化的原版MC1.8.8，FPS可以翻倍但是需要大量运行内存，兼容性一般</p>
+
+                <div class="tech-item">
+                    <div class="tech-icon">MC</div>
+                    <span>Eaglercraft1.8.8系列</span>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-icon">BS</div>
+                    <span>Eaglercraft1.5.2</span>
+                </div>
+           <p>原版MC1.5.2，经典的旧版网页MC，适合性能较差的设备</p>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>版本选择</h2>
+            <div class="button-grid">
+                <!-- 修改所有启动链接到./asset目录 -->
+                <a href="https://eaglercraft.com/mc/1.12.2/" class="btn launch">
+                    <span class="icon">▶</span>
+                    <span class="btn-text">启动Eaglercraft 1.12.2</span>
+                </a>
+                <a href="./asset/offline1.12wasm.html" class="btn launch">
+                    <span class="icon">▶</span>
+                    <span class="btn-text">启动Eaglercraft 1.12.2 wasm</span>
+                </a>
+                <a href="./asset/offline1.8.html" class="btn launch">
+                    <span class="icon">▶</span>
+                    <span class="btn-text">启动Eaglercraft 1.8.8</span>
+                </a>
+                <a href="./asset/offline1.8wasm.html" class="btn launch">
+                    <span class="icon">▶</span>
+                    <span class="btn-text">启动Eaglercraft 1.8.8 wasm</span>
+                </a>
+                <a href="./asset/offline1.5.html" class="btn launch">
+                    <span class="icon">▶</span>
+                    <span class="btn-text">启动Eaglercraft 1.5.2</span>
+                </a>
+                <a href="/" class="btn launch">
+                    <span class="icon"></span>
+                    <span class="btn-text">网页端直接游玩</span>
+                </a>
+                <a href="./download/offline1.12.zip" class="btn download">
+                    <span class="icon">↓</span>
+                    <span class="btn-text">下载1.12.2完整包</span>
+                </a>
+                <a href="./download/offline1.12wasm.zip" class="btn download">
+                    <span class="icon">↓</span>
+                    <span class="btn-text">下载1.12.2 wasm包</span>
+                </a>
+                <a href="./download/offline1.8.zip" class="btn download">
+                    <span class="icon">↓</span>
+                    <span class="btn-text">下载1.8.8完整包</span>
+                </a>
+                <a href="./download/offline1.8wasm.zip" class="btn download">
+                    <span class="icon">↓</span>
+                    <span class="btn-text">下载1.8.8 wasm包</span>
+                </a>
+                <a href="./download/offline1.5.zip" class="btn download">
+                    <span class="icon">↓</span>
+                    <span class="btn-text">下载1.5.2完整包</span>
+                </a>
+                <a href="/" class="btn download">
+                    <span class="icon"></span>
+                    <span class="btn-text">html.zip下载</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright © 2025 mc.lcrstem.top . All rights reserved .</p>
+        <p>mc.lcrstem.top</p>
+        <p>We (mc.lcrstem.top) are not affiliated with Minecraft, Mojang, or Microsoft. This website is for educational purposes only. We do not host any games on our servers nor do we condone piracy.</p>
+    </footer>
+
+    <script>
+        // 滚动动画触发
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
